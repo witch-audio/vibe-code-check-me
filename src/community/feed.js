@@ -26,21 +26,31 @@ function renderProjectCard(project, onNavigate) {
   const card = document.createElement('button');
   card.className = 'project-card';
   card.innerHTML = `
-    <div class="project-card-top">
-      <span class="project-card-name">${project.name}</span>
-      ${project.vibeCoded ? '<span class="vibe-badge">⚡ Vibe Coded</span>' : ''}
+    <div class="project-card-thumb-wrap">
+      <img
+        class="project-card-thumb"
+        src="https://image.thum.io/get/width/640/crop/360/${project.url}"
+        alt="${project.name} screenshot"
+        onerror="this.parentElement.style.display='none'"
+      />
     </div>
-    <div class="project-card-meta">
-      <img class="project-card-avatar" src="${project.githubAvatarUrl}" alt="${project.githubUsername}" />
-      <span class="project-card-username">@${project.githubUsername}</span>
-      <span class="project-card-date">· ${timeAgo(project._creationTime)}</span>
-    </div>
-    <p class="project-card-desc">${project.description}</p>
-    <div class="project-card-footer">
-      <div class="feedback-tags">
-        ${project.feedbackWants.map(t => `<span class="feedback-tag">${TAG_LABELS[t] ?? t}</span>`).join('')}
+    <div class="project-card-content">
+      <div class="project-card-top">
+        <span class="project-card-name">${project.name}</span>
+        ${project.vibeCoded ? '<span class="vibe-badge">⚡ Vibe Coded</span>' : ''}
       </div>
-      <span class="project-card-cta">${project.feedbackCount} feedback →</span>
+      <div class="project-card-meta">
+        <img class="project-card-avatar" src="${project.githubAvatarUrl}" alt="${project.githubUsername}" />
+        <span class="project-card-username">@${project.githubUsername}</span>
+        <span class="project-card-date">· ${timeAgo(project._creationTime)}</span>
+      </div>
+      <p class="project-card-desc">${project.description}</p>
+      <div class="project-card-footer">
+        <div class="feedback-tags">
+          ${project.feedbackWants.map(t => `<span class="feedback-tag">${TAG_LABELS[t] ?? t}</span>`).join('')}
+        </div>
+        <span class="project-card-cta">${project.feedbackCount} feedback →</span>
+      </div>
     </div>
   `;
   card.addEventListener('click', () => onNavigate(project.slug));

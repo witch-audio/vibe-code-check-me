@@ -63,6 +63,8 @@ export function initNav(switchScreen, getCommunityFeed, getSubmitModule) {
         subscribeAuth();
       });
     } else {
+      // Clear any stale local session token the server no longer recognizes
+      clearSession();
       userArea.innerHTML = `
         <button class="nav-signin-btn" id="nav-signin-btn">
           <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor">

@@ -2,7 +2,7 @@
  * Project detail page — shows project info + feedback thread.
  */
 
-import { convex, getSession, isLoggedIn, loginWithGitHub } from '../lib/convex.js';
+import { convex, getSession, clearSession, isLoggedIn, loginWithGitHub } from '../lib/convex.js';
 import { api } from '../../convex/_generated/api.js';
 
 const TAG_LABELS = {
@@ -127,6 +127,9 @@ export function initProject(onBack) {
     });
 
     submitBtn.addEventListener('click', async () => {
+      const session = getSession();
+      if (!session) { loginWithGitHub(); return; }
+
       const whatWorks = document.getElementById('fb-works').value.trim() || undefined;
       const whatDoesnt = document.getElementById('fb-doesnt').value.trim() || undefined;
       const featureRequest = document.getElementById('fb-feature').value.trim() || undefined;
@@ -142,7 +145,7 @@ export function initProject(onBack) {
 
       try {
         await convex.mutation(api.feedback.add, {
-          sessionToken: getSession(),
+          sessionToken: session,
           projectId,
           whatWorks,
           whatDoesnt,
@@ -152,7 +155,12 @@ export function initProject(onBack) {
         openBtn.style.display = '';
         clearForm();
       } catch (err) {
-        document.getElementById('fb-error').textContent = err.message || 'Something went wrong.';
+        if (err.message?.includes('Not authenticated')) {
+          clearSession();
+          loginWithGitHub();
+        } else {
+          document.getElementById('fb-error').textContent = err.message || 'Something went wrong.';
+        }
       } finally {
         submitBtn.disabled = false;
         submitBtn.textContent = 'Submit feedback';
@@ -199,6 +207,14 @@ export function initProject(onBack) {
               <a class="project-detail-link" href="${project.url}" target="_blank" rel="noopener noreferrer">
                 Visit →
               </a>
+              <div class="project-detail-preview">
+                <img
+                  src="https://image.thum.io/get/width/900/crop/500/${project.url}"
+                  alt="${project.name} screenshot"
+                  class="project-detail-screenshot"
+                  onerror="this.parentElement.style.display='none'"
+                />
+              </div>
               <p class="project-detail-desc">${project.description}</p>
               ${project.feedbackWants.length ? `
                 <div class="project-detail-tags">

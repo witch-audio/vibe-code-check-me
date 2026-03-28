@@ -1,0 +1,178 @@
+/* ============================
+   GLOBAL NAV
+   ============================ */
+
+#global-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  background: rgba(10, 10, 10, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  gap: 12px;
+}
+
+/* Brand */
+.nav-brand {
+  background: none;
+  border: none;
+  font-family: var(--font-display);
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  color: var(--white);
+  cursor: pointer;
+  padding: 0;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+
+.nav-brand:hover { color: var(--green); }
+
+/* Tabs */
+.nav-tabs {
+  display: flex;
+  gap: 2px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-pill);
+  padding: 3px;
+}
+
+.nav-tab {
+  background: none;
+  border: none;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gray-200);
+  padding: 6px 16px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.nav-tab:hover { color: var(--white); }
+
+.nav-tab.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--white);
+}
+
+/* Right actions */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.nav-submit {
+  background: var(--green);
+  color: #000;
+  border: none;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 7px 16px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  white-space: nowrap;
+}
+
+.nav-submit:hover {
+  background: var(--green-light);
+  transform: scale(1.03);
+}
+
+/* Auth area */
+.nav-signin-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 7px 14px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.nav-signin-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.nav-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-round);
+  border: 2px solid rgba(29, 185, 84, 0.4);
+  flex-shrink: 0;
+}
+
+.nav-username {
+  font-size: 13px;
+  color: var(--gray-100);
+  font-weight: 500;
+}
+
+.nav-signout {
+  background: none;
+  border: none;
+  color: var(--gray-400);
+  font-size: 11px;
+  cursor: pointer;
+  padding: 3px 5px;
+  border-radius: 4px;
+  transition: color 0.15s;
+  line-height: 1;
+}
+
+.nav-signout:hover { color: var(--gray-100); }
+
+/* Offset all screens below the nav */
+.screen {
+  top: 54px !important;
+}
+
+/* Community screens need to account for nav */
+.community-screen {
+  top: 54px !important;
+  height: calc(100% - 54px) !important;
+}
+
+/* Remove the redundant comm-header on community (replaced by global nav) */
+/* Keep it only on submit/project for back button */
+#community .comm-header {
+  display: none;
+}
+
+/* ─── Mobile ─────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .nav-brand { font-size: 12px; }
+  .nav-username { display: none; }
+  .nav-submit { padding: 7px 12px; font-size: 12px; }
+  .nav-tabs { gap: 0; }
+  .nav-tab { padding: 6px 12px; font-size: 12px; }
+}

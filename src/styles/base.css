@@ -44,6 +44,16 @@ html, body {
   width: 100%;
 }
 
+/* Community pages need scroll */
+body.community-mode {
+  overflow: auto;
+}
+
+body.community-mode #app {
+  height: auto;
+  min-height: 100%;
+}
+
 body {
   background: var(--bg);
   color: var(--white);

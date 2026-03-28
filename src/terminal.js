@@ -24,7 +24,7 @@ const LOADING_MESSAGES = [
   'Almost there...',
 ];
 
-export function initTerminal() {
+export function initTerminal(switchScreen) {
   const input = document.getElementById('username-input');
   const btn = document.getElementById('connect-btn');
   const error = document.getElementById('landing-error');
@@ -171,6 +171,12 @@ async function buildStoryCards(profile) {
       document.getElementById('username-input').value = '';
       document.getElementById('username-input').focus();
     }
+    if (e.target.id === 'end-community') {
+      import('./community/feed.js').then(({ initFeed }) => {
+        switchScreen('community');
+      });
+      switchScreen('community');
+    }
   });
 
   // Build progress bar
@@ -271,6 +277,7 @@ function generateEndCard(profile) {
       <p class="end-tagline">Keep shipping. Keep vibing.</p>
       <div class="end-actions">
         <button class="end-btn primary" id="end-restart">Check Another Dev</button>
+        <button class="end-btn secondary" id="end-community">Community Vibe Check ✦</button>
       </div>
       <div class="end-credit">
         <a href="https://vibecodecheck.me" target="_blank">vibecodecheck.me</a> · by <a href="https://twitter.com/witchaudio_" target="_blank">@witchaudio_</a>
@@ -455,4 +462,3 @@ async function shareCurrentCard() {
   }
 }
 
-export { switchScreen };

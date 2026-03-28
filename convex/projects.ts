@@ -76,7 +76,7 @@ export const create = mutation({
       slug = `${slug}-${Math.random().toString(36).slice(2, 6)}`;
     }
 
-    return await ctx.db.insert("projects", {
+    await ctx.db.insert("projects", {
       userId: user._id,
       githubUsername: user.githubUsername,
       githubAvatarUrl: user.githubAvatarUrl,
@@ -88,5 +88,6 @@ export const create = mutation({
       toolsUsed: args.toolsUsed,
       slug,
     });
+    return slug;
   },
 });

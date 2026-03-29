@@ -34,9 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Community pages
   const feed = initFeed(
-    (slug) => { project.show(slug); switchScreen('project'); },
-    () => { submit.show(); switchScreen('submit'); },
-    () => switchScreen('landing')
+    (slug) => { project.show(slug); switchScreen('project'); }
   );
 
   const submit = initSubmit(

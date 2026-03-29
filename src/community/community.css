@@ -220,13 +220,21 @@
   flex-shrink: 0;
 }
 
-/* ─── Feed ────────────────────────────────────────────────── */
+/* ─── Feed header + toggle ────────────────────────────────── */
+
+.feed-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 12px;
+}
 
 .feed-heading {
   font-family: var(--font-display);
   font-size: 28px;
   color: var(--white);
-  margin-bottom: 6px;
+  margin: 0;
 }
 
 .feed-sub {
@@ -234,6 +242,41 @@
   color: var(--gray-200);
   margin-bottom: 28px;
 }
+
+.view-toggle {
+  display: flex;
+  gap: 2px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-pill);
+  padding: 3px;
+  flex-shrink: 0;
+}
+
+.view-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  color: var(--gray-300);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.view-btn:hover { color: var(--white); }
+
+.view-btn.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--white);
+}
+
+/* ─── Feed states ─────────────────────────────────────────── */
 
 .feed-empty {
   text-align: center;
@@ -249,6 +292,145 @@
   padding: 48px 0;
 }
 
+/* ─── List view ───────────────────────────────────────────── */
+
+.project-list-view {
+  display: flex;
+  flex-direction: column;
+}
+
+.project-card--list {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: none;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 0;
+  padding: 16px 4px;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  transition: background 0.12s;
+}
+
+.project-card--list:first-child {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.project-card--list:hover { background: rgba(255, 255, 255, 0.03); }
+
+.project-list-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-round);
+  flex-shrink: 0;
+  margin-top: 2px;
+  border: 1.5px solid rgba(255, 255, 255, 0.08);
+}
+
+.project-list-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.project-list-top {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.project-list-top .project-card-name {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.project-list-byline {
+  font-size: 12px;
+  color: var(--gray-400);
+  white-space: nowrap;
+}
+
+.project-list-desc {
+  font-size: 13px;
+  color: var(--gray-200);
+  line-height: 1.5;
+  margin: 0;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.project-list-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 4px;
+  flex-wrap: wrap;
+}
+
+/* ─── Grid view ───────────────────────────────────────────── */
+
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.project-card--grid {
+  background: var(--bg-card);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: var(--radius-md);
+  padding: 0;
+  cursor: pointer;
+  transition: border-color 0.15s, transform 0.1s;
+  text-align: left;
+  width: 100%;
+  overflow: hidden;
+}
+
+.project-card--grid:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+  transform: translateY(-2px);
+}
+
+.project-card--grid .project-card-thumb-wrap {
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.project-card--grid .project-card-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+
+.project-card--grid .project-card-content {
+  padding: 12px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.project-card--grid .project-card-name {
+  font-size: 14px;
+}
+
+.project-card--grid .project-card-desc {
+  display: none;
+}
+
+/* Keep old .project-list for any legacy references */
 .project-list {
   display: flex;
   flex-direction: column;

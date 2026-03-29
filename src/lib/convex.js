@@ -43,9 +43,10 @@ export function handleAuthCallback() {
     history.replaceState(null, "", window.location.pathname);
     return true;
   }
-  if (hash === "#auth-error") {
+  if (hash.startsWith("#auth-error")) {
+    const msg = hash.includes("=") ? decodeURIComponent(hash.split("=")[1]) : "unknown";
     history.replaceState(null, "", window.location.pathname);
-    console.error("GitHub auth failed");
+    console.error("GitHub auth failed:", msg);
     return false;
   }
   return null;

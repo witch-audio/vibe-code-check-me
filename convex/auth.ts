@@ -30,6 +30,10 @@ export const githubCallback = httpAction(async (ctx, request) => {
   }
 
   try {
+    // The redirect_uri in the token exchange must match the one sent in the auth request
+    const callbackUrl = new URL(request.url);
+    const redirectUri = `${callbackUrl.origin}${callbackUrl.pathname}`;
+
     // Exchange code for GitHub access token
     const tokenRes = await fetch("https://github.com/login/oauth/access_token", {
       method: "POST",
@@ -41,11 +45,15 @@ export const githubCallback = httpAction(async (ctx, request) => {
         client_id: process.env.GITHUB_CLIENT_ID,
         client_secret: process.env.GITHUB_CLIENT_SECRET,
         code,
+        redirect_uri: redirectUri,
       }),
     });
 
-    const tokenData = await tokenRes.json() as { access_token?: string };
-    if (!tokenData.access_token) throw new Error("No access token returned");
+    const tokenData = await tokenRes.json() as { access_token?: string; error?: string; error_description?: string };
+    if (!tokenData.access_token) {
+      console.error("GitHub token exchange failed:", tokenData.error, tokenData.error_description);
+      throw new Error(tokenData.error_description ?? "No access token returned");
+    }
 
     // Fetch GitHub user profile
     const userRes = await fetch("https://api.github.com/user", {
@@ -79,10 +87,11 @@ export const githubCallback = httpAction(async (ctx, request) => {
         Location: `${appUrl}#session=${sessionToken}`,
       },
     });
-  } catch {
+  } catch (err) {
+    const msg = err instanceof Error ? encodeURIComponent(err.message) : "unknown";
     return new Response(null, {
       status: 302,
-      headers: { Location: `${appUrl}#auth-error` },
+      headers: { Location: `${appUrl}#auth-error=${msg}` },
     });
   }
 });

@@ -33,13 +33,19 @@ export const list = query({
 });
 
 export const getBySlug = query({
-  args: { slug: v.string() },
-  handler: async (ctx, { slug }) => {
+  args: { slug: v.string(), sessionToken: v.optional(v.string()) },
+  handler: async (ctx, { slug, sessionToken }) => {
     const project = await ctx.db
       .query("projects")
       .withIndex("by_slug", (q) => q.eq("slug", slug))
       .unique();
     if (!project) return null;
+
+    let isOwner = false;
+    if (sessionToken) {
+      const user = await getUserFromSession(ctx, sessionToken);
+      isOwner = user?._id === project.userId;
+    }
 
     const feedbackCount = (
       await ctx.db
@@ -48,7 +54,37 @@ export const getBySlug = query({
         .collect()
     ).length;
 
-    return { ...project, feedbackCount };
+    return { ...project, feedbackCount, isOwner };
+  },
+});
+
+export const update = mutation({
+  args: {
+    sessionToken: v.string(),
+    projectId: v.id("projects"),
+    name: v.string(),
+    url: v.string(),
+    description: v.string(),
+    feedbackWants: v.array(v.string()),
+    vibeCoded: v.boolean(),
+    toolsUsed: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const user = await getUserFromSession(ctx, args.sessionToken);
+    if (!user) throw new Error("Not authenticated");
+
+    const project = await ctx.db.get(args.projectId);
+    if (!project) throw new Error("Project not found");
+    if (project.userId !== user._id) throw new Error("Not authorized");
+
+    await ctx.db.patch(args.projectId, {
+      name: args.name,
+      url: args.url,
+      description: args.description,
+      feedbackWants: args.feedbackWants,
+      vibeCoded: args.vibeCoded,
+      toolsUsed: args.toolsUsed,
+    });
   },
 });
 

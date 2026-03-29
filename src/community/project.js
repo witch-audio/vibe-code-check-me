@@ -3,6 +3,13 @@
  */
 
 import { convex, getSession, clearSession, isLoggedIn, loginWithGitHub } from '../lib/convex.js';
+
+const TAG_OPTIONS = [
+  { value: 'first_impressions', label: 'First impressions' },
+  { value: 'ui_ux', label: 'UI / UX' },
+  { value: 'bugs', label: 'Bugs' },
+  { value: 'features', label: 'Feature ideas' },
+];
 import { api } from '../../convex/_generated/api.js';
 
 const TAG_LABELS = {
@@ -168,6 +175,111 @@ export function initProject(onBack) {
     });
   }
 
+  function wireEditForm(project) {
+    const editBtn = body.querySelector('#project-edit-btn');
+    if (!editBtn) return;
+
+    editBtn.addEventListener('click', () => {
+      // Inject edit form below the header
+      const header = body.querySelector('.project-detail-header');
+      const existing = body.querySelector('.project-edit-form');
+      if (existing) { existing.remove(); editBtn.textContent = 'Edit'; return; }
+
+      editBtn.textContent = 'Cancel';
+
+      const form = document.createElement('div');
+      form.className = 'project-edit-form';
+      form.innerHTML = `
+        <h3 class="edit-form-title">Edit project</h3>
+        <div class="form-group">
+          <label class="form-label">Project name</label>
+          <input class="form-input" id="edit-name" value="${project.name}" maxlength="80" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">URL <span>(live site or repo)</span></label>
+          <input class="form-input" id="edit-url" value="${project.url}" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">What does it do? <span>(1-2 sentences)</span></label>
+          <textarea class="form-textarea" id="edit-desc" maxlength="280">${project.description}</textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">What feedback do you want?</label>
+          <div class="checkbox-grid">
+            ${TAG_OPTIONS.map(t => `
+              <label class="checkbox-item">
+                <input type="checkbox" name="edit-tag" value="${t.value}" ${project.feedbackWants.includes(t.value) ? 'checked' : ''} />
+                ${t.label}
+              </label>
+            `).join('')}
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="toggle-row">
+            <span>Built with vibe coding / AI tools?</span>
+            <input type="checkbox" id="edit-vibe" ${project.vibeCoded ? 'checked' : ''} />
+          </label>
+        </div>
+        <div class="form-group" id="edit-tools-group" style="display:${project.vibeCoded ? 'flex' : 'none'}">
+          <label class="form-label">Tools used <span>(optional)</span></label>
+          <input class="form-input" id="edit-tools" value="${project.toolsUsed ?? ''}" maxlength="100" />
+        </div>
+        <p class="form-error" id="edit-error"></p>
+        <div class="edit-form-actions">
+          <button class="feedback-submit-btn" id="edit-save-btn">Save changes</button>
+          <button class="feedback-cancel-btn" id="edit-cancel-btn">Cancel</button>
+        </div>
+      `;
+
+      header.after(form);
+
+      form.querySelector('#edit-vibe').addEventListener('change', (e) => {
+        form.querySelector('#edit-tools-group').style.display = e.target.checked ? 'flex' : 'none';
+      });
+
+      form.querySelector('#edit-cancel-btn').addEventListener('click', () => {
+        form.remove();
+        editBtn.textContent = 'Edit';
+      });
+
+      form.querySelector('#edit-save-btn').addEventListener('click', async () => {
+        const session = getSession();
+        if (!session) { loginWithGitHub(); return; }
+
+        const name = form.querySelector('#edit-name').value.trim();
+        const url = form.querySelector('#edit-url').value.trim();
+        const description = form.querySelector('#edit-desc').value.trim();
+        const feedbackWants = [...form.querySelectorAll('input[name="edit-tag"]:checked')].map(el => el.value);
+        const vibeCoded = form.querySelector('#edit-vibe').checked;
+        const toolsUsed = form.querySelector('#edit-tools').value.trim() || undefined;
+        const errorEl = form.querySelector('#edit-error');
+        const saveBtn = form.querySelector('#edit-save-btn');
+
+        if (!name) { errorEl.textContent = 'Name is required.'; return; }
+        if (!url || !url.startsWith('http')) { errorEl.textContent = 'A valid URL is required.'; return; }
+        if (!description) { errorEl.textContent = 'Description is required.'; return; }
+
+        saveBtn.disabled = true;
+        saveBtn.textContent = 'Saving...';
+        errorEl.textContent = '';
+
+        try {
+          await convex.mutation(api.projects.update, {
+            sessionToken: session,
+            projectId: project._id,
+            name, url, description, feedbackWants, vibeCoded, toolsUsed,
+          });
+          form.remove();
+          editBtn.textContent = 'Edit';
+        } catch (err) {
+          errorEl.textContent = err.message || 'Something went wrong.';
+          saveBtn.disabled = false;
+          saveBtn.textContent = 'Save changes';
+        }
+      });
+    });
+  }
+
   function clearForm() {
     ['fb-works', 'fb-doesnt', 'fb-feature'].forEach(id => {
       const el = document.getElementById(id);
@@ -186,7 +298,7 @@ export function initProject(onBack) {
 
       projectUnsub = convex.onUpdate(
         api.projects.getBySlug,
-        { slug },
+        { slug, sessionToken: getSession() ?? undefined },
         (project) => {
           if (!project) {
             body.innerHTML = '<p class="feed-empty">Project not found.</p>';
@@ -198,7 +310,10 @@ export function initProject(onBack) {
 
           body.innerHTML = `
             <div class="project-detail-header">
-              <h1 class="project-detail-name">${project.name}</h1>
+              <div class="project-detail-title-row">
+                <h1 class="project-detail-name">${project.name}</h1>
+                ${project.isOwner ? '<button class="project-edit-btn" id="project-edit-btn">Edit</button>' : ''}
+              </div>
               <div class="project-detail-meta">
                 <img class="project-detail-avatar" src="${project.githubAvatarUrl}" alt="${project.githubUsername}" />
                 <span class="project-detail-username">@${project.githubUsername}</span>
@@ -259,6 +374,9 @@ export function initProject(onBack) {
             </div>
           `;
 
+          if (project.isOwner) {
+            wireEditForm(project);
+          }
           renderFeedbackForm(project._id);
           subscribeFeedback(project._id);
         }

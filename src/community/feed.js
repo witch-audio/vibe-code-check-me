@@ -29,7 +29,7 @@ function renderProjectCard(project, onNavigate) {
     <div class="project-card-thumb-wrap">
       <img
         class="project-card-thumb"
-        src="https://image.thum.io/get/width/640/crop/360/${project.url}"
+        src="https://s0.wordpress.com/mshots/v1/${encodeURIComponent(project.url)}?w=640&h=360"
         alt="${project.name} screenshot"
         onerror="this.parentElement.style.display='none'"
       />

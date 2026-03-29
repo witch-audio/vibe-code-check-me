@@ -209,7 +209,7 @@ export function initProject(onBack) {
               </a>
               <div class="project-detail-preview">
                 <img
-                  src="https://image.thum.io/get/width/900/crop/500/${project.url}"
+                  src="https://s0.wordpress.com/mshots/v1/${encodeURIComponent(project.url)}?w=900&h=500"
                   alt="${project.name} screenshot"
                   class="project-detail-screenshot"
                   onerror="this.parentElement.style.display='none'"

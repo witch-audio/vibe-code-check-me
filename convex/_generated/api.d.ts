@@ -9,6 +9,7 @@
  */
 
 import type * as auth from "../auth.js";
+import type * as authNode from "../authNode.js";
 import type * as feedback from "../feedback.js";
 import type * as http from "../http.js";
 import type * as lib_session from "../lib/session.js";
@@ -23,6 +24,7 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
+  authNode: typeof authNode;
   feedback: typeof feedback;
   http: typeof http;
   "lib/session": typeof lib_session;

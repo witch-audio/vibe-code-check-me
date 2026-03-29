@@ -297,36 +297,47 @@
 .project-list-view {
   display: flex;
   flex-direction: column;
+  gap: 12px;
 }
 
 .project-card--list {
   display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  background: none;
-  border: none;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 0;
-  padding: 16px 4px;
+  align-items: stretch;
+  gap: 0;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
+  padding: 0;
   cursor: pointer;
   text-align: left;
   width: 100%;
-  transition: background 0.12s;
+  overflow: hidden;
+  transition: background 0.15s, border-color 0.15s;
 }
 
-.project-card--list:first-child {
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+.project-card--list:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.13);
 }
 
-.project-card--list:hover { background: rgba(255, 255, 255, 0.03); }
-
-.project-list-avatar {
-  width: 34px;
-  height: 34px;
-  border-radius: var(--radius-round);
+.project-list-thumb-wrap {
+  width: 160px;
+  min-width: 160px;
+  background: rgba(255, 255, 255, 0.04);
+  overflow: hidden;
   flex-shrink: 0;
-  margin-top: 2px;
-  border: 1.5px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+}
+
+.project-list-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.project-list-thumb-wrap.thumb-error {
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .project-list-body {
@@ -334,12 +345,13 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
+  padding: 16px 20px;
 }
 
 .project-list-top {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 8px;
   flex-wrap: wrap;
 }
@@ -349,10 +361,23 @@
   font-weight: 700;
 }
 
+.project-list-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.project-list-avatar {
+  width: 18px;
+  height: 18px;
+  border-radius: var(--radius-round);
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 .project-list-byline {
   font-size: 12px;
   color: var(--gray-400);
-  white-space: nowrap;
 }
 
 .project-list-desc {
@@ -371,7 +396,8 @@
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  margin-top: 4px;
+  margin-top: auto;
+  padding-top: 4px;
   flex-wrap: wrap;
 }
 

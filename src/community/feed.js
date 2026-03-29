@@ -29,11 +29,21 @@ function renderListCard(project, onNavigate) {
   const card = document.createElement('button');
   card.className = 'project-card project-card--list';
   card.innerHTML = `
-    <img class="project-list-avatar" src="${project.githubAvatarUrl}" alt="${project.githubUsername}" />
+    <div class="project-list-thumb-wrap">
+      <img
+        class="project-list-thumb"
+        src="https://s0.wordpress.com/mshots/v1/${encodeURIComponent(project.url)}?w=320&h=200"
+        alt="${project.name} screenshot"
+        onerror="this.parentElement.classList.add('thumb-error')"
+      />
+    </div>
     <div class="project-list-body">
       <div class="project-list-top">
         <span class="project-card-name">${project.name}</span>
         ${project.vibeCoded ? '<span class="vibe-badge">⚡ Vibe Coded</span>' : ''}
+      </div>
+      <div class="project-list-meta">
+        <img class="project-list-avatar" src="${project.githubAvatarUrl}" alt="${project.githubUsername}" />
         <span class="project-list-byline">@${project.githubUsername} · ${timeAgo(project._creationTime)}</span>
       </div>
       <p class="project-list-desc">${project.description}</p>

@@ -79,13 +79,11 @@ export function initNav(switchScreen, getCommunityFeed, getSubmitModule) {
 
   // Update active tab based on current screen
   function setActiveTab(screenId) {
-    const homeBtn = document.getElementById('nav-tab-home');
-    const commBtn = document.getElementById('nav-tab-community');
-    homeBtn.classList.remove('active');
-    commBtn.classList.remove('active');
+    document.getElementById('nav-tab-home').classList.remove('active');
+    document.getElementById('nav-tab-community').classList.remove('active');
 
-    if (SECTIONS.home.includes(screenId)) homeBtn.classList.add('active');
-    if (['community', 'submit', 'project'].includes(screenId)) commBtn.classList.add('active');
+    if (SECTIONS.home.includes(screenId)) document.getElementById('nav-tab-home').classList.add('active');
+    if (['community', 'submit', 'project'].includes(screenId)) document.getElementById('nav-tab-community').classList.add('active');
   }
 
   subscribeAuth();

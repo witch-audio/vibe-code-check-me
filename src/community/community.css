@@ -2,6 +2,91 @@
    COMMUNITY — Feed, Submit, Project Detail
    ============================ */
 
+/* ─── Community Hero ──────────────────────────────────────── */
+
+.community-hero {
+  width: 100%;
+  padding: 64px 24px 48px;
+  background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(29, 185, 84, 0.12) 0%, transparent 70%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  display: flex;
+  justify-content: center;
+}
+
+.community-hero-inner {
+  max-width: 640px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.hero-eyebrow {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--green);
+}
+
+.community-hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 5vw, 44px);
+  font-weight: 400;
+  line-height: 1.15;
+  color: var(--white);
+  margin: 0;
+}
+
+.community-hero-sub {
+  font-size: 16px;
+  color: var(--gray-200);
+  line-height: 1.6;
+  margin: 0;
+  max-width: 480px;
+}
+
+.hero-ctas {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.hero-submit-cta {
+  background: var(--green);
+  color: #000;
+  border: none;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 700;
+  padding: 10px 22px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  white-space: nowrap;
+}
+
+.hero-submit-cta:hover {
+  background: var(--green-light);
+  transform: scale(1.02);
+}
+
+.hero-learn-link {
+  font-size: 13px;
+  color: var(--gray-300);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.hero-learn-link:hover { color: var(--white); }
+
+@media (max-width: 600px) {
+  .community-hero { padding: 44px 20px 36px; }
+  .community-hero-sub { font-size: 14px; }
+}
+
 /* Community screens override the app's overflow:hidden */
 .community-screen {
   overflow-y: auto;

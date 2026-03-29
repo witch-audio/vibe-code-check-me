@@ -58,6 +58,11 @@ document.addEventListener('DOMContentLoaded', () => {
     nav.setActiveTab('community');
   });
 
+  // Hero submit CTA
+  document.getElementById('hero-submit-btn').addEventListener('click', () => {
+    document.getElementById('nav-submit-btn').click();
+  });
+
   // Nav home brand button
   document.getElementById('nav-home-btn').addEventListener('click', () => {
     switchScreen('landing');

@@ -6,7 +6,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 60px 20px 80px;
+  justify-content: center;
+  padding: 80px 20px;
   min-height: 100%;
   overflow-y: auto;
 }
@@ -20,7 +21,6 @@
   text-align: center;
   max-width: 560px;
   width: 100%;
-  padding-top: 40px;
 }
 
 .vc-shield {
@@ -363,8 +363,7 @@
 
 /* ── Mobile ──────────────────────────────────────────── */
 @media (max-width: 600px) {
-  #vibe-check { padding: 40px 16px 60px; }
-  .vc-hero { padding-top: 20px; }
+  #vibe-check { padding: 40px 16px; }
   .vc-input-group { flex-direction: column; }
   .vc-result-header { flex-direction: column; text-align: center; }
   .vc-result-badges { justify-content: center; }

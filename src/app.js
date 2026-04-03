@@ -6,6 +6,7 @@ import './styles/base.css';
 import './styles/terminal.css';
 import './styles/components.css';
 import './styles/nav.css';
+import './styles/vibe-check.css';
 import './community/community.css';
 
 import { initTerminal } from './terminal.js';
@@ -14,6 +15,7 @@ import { initNav } from './community/nav.js';
 import { initFeed } from './community/feed.js';
 import { initSubmit } from './community/submit.js';
 import { initProject } from './community/project.js';
+import { initVibeCheck } from './vibe-check/vibe-check.js';
 
 function switchScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -32,6 +34,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   initTerminal(switchScreen);
 
+  const vibeCheck = initVibeCheck();
+
   // Community pages
   const feed = initFeed(
     (slug) => { project.show(slug); switchScreen('project'); }
@@ -46,8 +50,8 @@ document.addEventListener('DOMContentLoaded', () => {
     () => { feed.show(); switchScreen('community'); }
   );
 
-  // Global nav — pass getters so nav can trigger feed.show() and submit.show()
-  const nav = initNav(switchScreen, () => feed, () => submit);
+  // Global nav — pass getters so nav can trigger module methods lazily
+  const nav = initNav(switchScreen, () => feed, () => submit, () => vibeCheck);
 
   // Landing → community button
   document.getElementById('landing-community-btn').addEventListener('click', () => {
@@ -61,10 +65,11 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('nav-submit-btn').click();
   });
 
-  // Nav home brand button
+  // Nav brand button → Vibe Check (first tab = home)
   document.getElementById('nav-home-btn').addEventListener('click', () => {
-    switchScreen('landing');
-    nav.setActiveTab('landing');
+    vibeCheck.show();
+    switchScreen('vibe-check');
+    nav.setActiveTab('vibe-check');
   });
 
   // Post-auth: user just came back from GitHub OAuth — take them to submit
@@ -75,10 +80,9 @@ document.addEventListener('DOMContentLoaded', () => {
     switchScreen('submit');
     nav.setActiveTab('community');
   } else {
-    // Default: community feed is the home screen
-    feed.show();
-    switchScreen('community');
-    nav.setActiveTab('community');
+    // Default: Vibe Check is the landing tab
+    switchScreen('vibe-check');
+    nav.setActiveTab('vibe-check');
   }
 
   // Track screen changes for active tab
@@ -87,8 +91,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (m.target.classList.contains('active')) {
         nav.setActiveTab(m.target.id);
         if (m.target.id === 'community') feed.show();
-      } else {
-        // hide cleanup handled inside each module
       }
     });
   });

@@ -6,17 +6,22 @@ import { convex, getSession, clearSession, loginWithGitHub } from '../lib/convex
 import { api } from '../../convex/_generated/api.js';
 
 const SECTIONS = {
+  'vibe-check': ['vibe-check'],
   home: ['landing', 'loading-screen', 'stories'],
   community: ['community'],
   submit: ['submit'],
   project: ['project'],
 };
 
-export function initNav(switchScreen, getCommunityFeed, getSubmitModule) {
-  const nav = document.getElementById('global-nav');
+export function initNav(switchScreen, getCommunityFeed, getSubmitModule, getVibeCheck) {
   const userArea = document.getElementById('nav-user-area');
 
   // Tab clicks
+  document.getElementById('nav-tab-vibe-check').addEventListener('click', () => {
+    getVibeCheck().show();
+    switchScreen('vibe-check');
+  });
+
   document.getElementById('nav-tab-home').addEventListener('click', () => {
     switchScreen('landing');
   });
@@ -63,7 +68,6 @@ export function initNav(switchScreen, getCommunityFeed, getSubmitModule) {
         subscribeAuth();
       });
     } else {
-      // Clear any stale local session token the server no longer recognizes
       clearSession();
       userArea.innerHTML = `
         <button class="nav-signin-btn" id="nav-signin-btn">
@@ -77,13 +81,19 @@ export function initNav(switchScreen, getCommunityFeed, getSubmitModule) {
     }
   }
 
-  // Update active tab based on current screen
   function setActiveTab(screenId) {
-    document.getElementById('nav-tab-home').classList.remove('active');
-    document.getElementById('nav-tab-community').classList.remove('active');
-
-    if (SECTIONS.home.includes(screenId)) document.getElementById('nav-tab-home').classList.add('active');
-    if (['community', 'submit', 'project'].includes(screenId)) document.getElementById('nav-tab-community').classList.add('active');
+    ['nav-tab-vibe-check', 'nav-tab-home', 'nav-tab-community'].forEach(id => {
+      document.getElementById(id).classList.remove('active');
+    });
+    if (SECTIONS['vibe-check'].includes(screenId)) {
+      document.getElementById('nav-tab-vibe-check').classList.add('active');
+    }
+    if (SECTIONS.home.includes(screenId)) {
+      document.getElementById('nav-tab-home').classList.add('active');
+    }
+    if (['community', 'submit', 'project'].includes(screenId)) {
+      document.getElementById('nav-tab-community').classList.add('active');
+    }
   }
 
   subscribeAuth();

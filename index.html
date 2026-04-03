@@ -9,20 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   </head>
-  <body class="community-mode">
-    <!-- ============ GLOBAL NAV ============ -->
-    <nav id="global-nav">
-      <button class="nav-brand" id="nav-home-btn">VIBE CODE CHECK</button>
-      <div class="nav-tabs">
-        <button class="nav-tab" id="nav-tab-vibe-check">Check</button>
-        <button class="nav-tab" id="nav-tab-community">Community</button>
-      </div>
-      <div class="nav-actions">
-        <button class="nav-submit" id="nav-submit-btn">+ Submit</button>
-        <div id="nav-user-area"></div>
-      </div>
-    </nav>
-
+  <body>
     <div id="app">
 
       <!-- ============ VIBE CHECK SCREEN ============ -->
@@ -56,19 +43,6 @@
             <button id="connect-btn" class="pill-btn">Let's go</button>
           </div>
           <p id="landing-error" class="landing-error"></p>
-
-          <div class="landing-divider">
-            <span class="landing-divider-line"></span>
-            <span class="landing-divider-text">or</span>
-            <span class="landing-divider-line"></span>
-          </div>
-
-          <button id="landing-community-btn" class="landing-community-btn">
-            <span class="community-btn-icon">✦</span>
-            Browse the Community
-            <span class="community-btn-arrow">→</span>
-          </button>
-          <p class="landing-community-sub">Submit your project · Get real feedback · Discover what vibe coders are building</p>
 
           <div class="landing-footer">
             <span>vibecodecheck.me</span>
@@ -107,57 +81,6 @@
         <div class="story-footer">
           <span class="story-counter" id="story-counter">1 / 6</span>
         </div>
-      </div>
-
-      <!-- ============ COMMUNITY FEED ============ -->
-      <div id="community" class="screen community-screen">
-        <div class="community-hero">
-          <div class="community-hero-inner">
-            <div class="hero-eyebrow">✦ Open community</div>
-            <h1 class="community-hero-title">Get real feedback on<br>your vibe-coded projects.</h1>
-            <p class="community-hero-sub">Submit what you're building. Get honest reviews from developers who actually get it.</p>
-            <div class="hero-ctas">
-              <button class="hero-submit-cta" id="hero-submit-btn">+ Submit your project</button>
-              <a class="hero-learn-link" href="https://twitter.com/witchaudio_" target="_blank" rel="noopener noreferrer">by @witchaudio_ →</a>
-            </div>
-          </div>
-        </div>
-        <div class="comm-body">
-          <div class="feed-header">
-            <h2 class="feed-heading">Latest projects</h2>
-            <div class="view-toggle">
-              <button class="view-btn" id="view-list-btn" title="List view">
-                <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><rect x="0" y="1" width="15" height="2" rx="1" fill="currentColor"/><rect x="0" y="6.5" width="15" height="2" rx="1" fill="currentColor"/><rect x="0" y="12" width="15" height="2" rx="1" fill="currentColor"/></svg>
-                List
-              </button>
-              <button class="view-btn" id="view-grid-btn" title="Grid view">
-                <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><rect x="0" y="0" width="6.5" height="6.5" rx="1" fill="currentColor"/><rect x="8.5" y="0" width="6.5" height="6.5" rx="1" fill="currentColor"/><rect x="0" y="8.5" width="6.5" height="6.5" rx="1" fill="currentColor"/><rect x="8.5" y="8.5" width="6.5" height="6.5" rx="1" fill="currentColor"/></svg>
-                Grid
-              </button>
-            </div>
-          </div>
-          <div id="projects-feed"></div>
-        </div>
-      </div>
-
-      <!-- ============ SUBMIT SCREEN ============ -->
-      <div id="submit" class="screen community-screen">
-        <div class="comm-header">
-          <button class="comm-back-btn" id="submit-back">← Community</button>
-          <span class="comm-brand">SUBMIT PROJECT</span>
-          <span></span>
-        </div>
-        <div class="comm-body" id="submit-body"></div>
-      </div>
-
-      <!-- ============ PROJECT DETAIL ============ -->
-      <div id="project" class="screen community-screen">
-        <div class="comm-header">
-          <button class="comm-back-btn" id="project-back">← Community</button>
-          <span class="comm-brand" id="project-title"></span>
-          <span></span>
-        </div>
-        <div class="comm-body" id="project-body"></div>
       </div>
 
     </div>

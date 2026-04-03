@@ -81,7 +81,7 @@ function renderLoadingState(container, repo) {
   container.innerHTML = `
     <div class="vc-loading">
       <div class="vc-loading-ring"></div>
-      <p class="vc-loading-label">Scanning context files…</p>
+      <p class="vc-loading-label">Scanning repository…</p>
       <p class="vc-loading-repo">${escapeHtml(repo)}</p>
     </div>
   `;

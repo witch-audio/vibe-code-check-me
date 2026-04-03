@@ -5,6 +5,8 @@
  */
 
 const API_BASE = 'https://api.github.com';
+const FETCH_BATCH_SIZE = 4;
+const FETCH_BATCH_DELAY_MS = 250;
 
 const CONTEXT_FILES = ['AGENTS.md', 'CLAUDE.md', 'MEMORY.md', 'SOUL.md', 'USER.md'];
 
@@ -104,6 +106,27 @@ async function ghGet(path) {
   return res.json();
 }
 
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+export async function runBatchedTasks(items, worker, options = {}) {
+  const batchSize = options.batchSize ?? FETCH_BATCH_SIZE;
+  const delayMs = options.delayMs ?? FETCH_BATCH_DELAY_MS;
+  const results = [];
+
+  for (let index = 0; index < items.length; index += batchSize) {
+    const batch = items.slice(index, index + batchSize);
+    results.push(...await Promise.allSettled(batch.map((item) => worker(item))));
+
+    if (index + batchSize < items.length && delayMs > 0) {
+      await sleep(delayMs);
+    }
+  }
+
+  return results;
+}
+
 /**
  * Decode GitHub's base64 file content (handles line-wrapped base64).
  */
@@ -162,17 +185,17 @@ async function fetchRepoFiles(owner, repo) {
 
   // Fetch content of selected files (skip files >100 KB to avoid rate limit waste)
   const fetched = [];
-  await Promise.allSettled(
-    ranked.map(async (f) => {
-      try {
-        if (f.size > 102400) return; // skip large files
-        const data = await ghGet(`/repos/${owner}/${repo}/contents/${f.path}`);
-        if (data.content) {
-          fetched.push({ name: f.path, content: decodeContent(data.content) });
-        }
-      } catch { /* skip */ }
-    })
-  );
+  await runBatchedTasks(ranked, async (f) => {
+    try {
+      if (f.size > 102400) return;
+      const data = await ghGet(`/repos/${owner}/${repo}/contents/${f.path}`);
+      if (data.content) {
+        fetched.push({ name: f.path, content: decodeContent(data.content) });
+      }
+    } catch {
+      // Skip files that fail individually so one bad fetch does not stop the scan.
+    }
+  });
 
   // Determine scan mode label
   const hasContextFiles = fetched.some(f =>

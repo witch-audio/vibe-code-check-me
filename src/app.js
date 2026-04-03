@@ -28,6 +28,23 @@ function switchScreen(id) {
   return el;
 }
 
+function switchScreenInstant(id) {
+  // Suppress transitions for the initial render to prevent flicker
+  const screens = document.querySelectorAll('.screen');
+  screens.forEach(s => { s.style.transition = 'none'; s.classList.remove('active'); });
+  const el = document.getElementById(id);
+  if (el) {
+    el.classList.add('active');
+    el.scrollTop = 0;
+  }
+  document.body.classList.toggle('community-mode', el?.classList.contains('community-screen'));
+  // Re-enable transitions after the next two frames (ensures paint has settled)
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    screens.forEach(s => { s.style.transition = ''; });
+  }));
+  return el;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   // Detect post-auth redirect before anything else
   const justAuthed = handleAuthCallback();
@@ -77,11 +94,11 @@ document.addEventListener('DOMContentLoaded', () => {
     nav.subscribeAuth();
     feed.show();
     submit.show();
-    switchScreen('submit');
+    switchScreenInstant('submit');
     nav.setActiveTab('community');
   } else {
     // Default: Vibe Check is the landing tab
-    switchScreen('vibe-check');
+    switchScreenInstant('vibe-check');
     nav.setActiveTab('vibe-check');
   }
 

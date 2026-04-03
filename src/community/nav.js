@@ -15,18 +15,17 @@ const SECTIONS = {
 
 export function initNav(switchScreen, getCommunityFeed, getSubmitModule, getVibeCheck) {
   const userArea = document.getElementById('nav-user-area');
+  const vibeCheckTab = document.getElementById('nav-tab-vibe-check');
+  const communityTab = document.getElementById('nav-tab-community');
+  const wrappedTab = document.getElementById('nav-tab-home');
 
   // Tab clicks
-  document.getElementById('nav-tab-vibe-check').addEventListener('click', () => {
+  vibeCheckTab.addEventListener('click', () => {
     getVibeCheck().show();
     switchScreen('vibe-check');
   });
 
-  document.getElementById('nav-tab-home').addEventListener('click', () => {
-    switchScreen('landing');
-  });
-
-  document.getElementById('nav-tab-community').addEventListener('click', () => {
+  communityTab.addEventListener('click', () => {
     getCommunityFeed().show();
     switchScreen('community');
   });
@@ -82,17 +81,14 @@ export function initNav(switchScreen, getCommunityFeed, getSubmitModule, getVibe
   }
 
   function setActiveTab(screenId) {
-    ['nav-tab-vibe-check', 'nav-tab-home', 'nav-tab-community'].forEach(id => {
-      document.getElementById(id).classList.remove('active');
+    [vibeCheckTab, wrappedTab, communityTab].filter(Boolean).forEach((tab) => {
+      tab.classList.remove('active');
     });
     if (SECTIONS['vibe-check'].includes(screenId)) {
-      document.getElementById('nav-tab-vibe-check').classList.add('active');
-    }
-    if (SECTIONS.home.includes(screenId)) {
-      document.getElementById('nav-tab-home').classList.add('active');
+      vibeCheckTab.classList.add('active');
     }
     if (['community', 'submit', 'project'].includes(screenId)) {
-      document.getElementById('nav-tab-community').classList.add('active');
+      communityTab.classList.add('active');
     }
   }
 

@@ -2,17 +2,21 @@
    GLOBAL NAV
    ============================ */
 
+:root {
+  --nav-height: 54px;
+}
+
 #global-nav {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1000;
-  height: 54px;
-  display: flex;
+  height: var(--nav-height);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
+  padding: 0 max(20px, calc((100vw - 1180px) / 2));
   background: rgba(10, 10, 10, 0.88);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -22,16 +26,19 @@
 
 /* Brand */
 .nav-brand {
+  display: inline-flex;
+  align-items: center;
   background: none;
   border: none;
   font-family: var(--font-display);
   font-size: 14px;
+  line-height: 1;
   letter-spacing: 0.06em;
   color: var(--white);
   cursor: pointer;
   padding: 0;
   white-space: nowrap;
-  flex-shrink: 0;
+  justify-self: start;
   transition: color 0.15s;
 }
 
@@ -44,14 +51,21 @@
   background: rgba(255, 255, 255, 0.05);
   border-radius: var(--radius-pill);
   padding: 3px;
+  justify-self: center;
 }
 
 .nav-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  appearance: none;
+  -webkit-appearance: none;
   background: none;
   border: none;
   font-family: var(--font-body);
   font-size: 13px;
   font-weight: 600;
+  line-height: 1;
   color: var(--gray-200);
   padding: 6px 16px;
   border-radius: var(--radius-pill);
@@ -61,6 +75,20 @@
 }
 
 .nav-tab:hover { color: var(--white); }
+
+.nav-tab:focus,
+.nav-submit:focus,
+.nav-signin-btn:focus,
+.nav-brand:focus {
+  outline: none;
+}
+
+.nav-tab:focus-visible,
+.nav-submit:focus-visible,
+.nav-signin-btn:focus-visible,
+.nav-brand:focus-visible {
+  box-shadow: 0 0 0 2px rgba(29, 185, 84, 0.45);
+}
 
 .nav-tab.active {
   background: rgba(255, 255, 255, 0.1);
@@ -72,16 +100,22 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  flex-shrink: 0;
+  justify-self: end;
 }
 
 .nav-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  appearance: none;
+  -webkit-appearance: none;
   background: var(--green);
   color: #000;
   border: none;
   font-family: var(--font-body);
   font-size: 13px;
   font-weight: 700;
+  line-height: 1;
   padding: 7px 16px;
   border-radius: var(--radius-pill);
   cursor: pointer;
@@ -99,12 +133,15 @@
   display: flex;
   align-items: center;
   gap: 7px;
+  appearance: none;
+  -webkit-appearance: none;
   background: rgba(255, 255, 255, 0.07);
   border: 1px solid rgba(255, 255, 255, 0.12);
   color: var(--white);
   font-family: var(--font-body);
   font-size: 13px;
   font-weight: 600;
+  line-height: 1;
   padding: 7px 14px;
   border-radius: var(--radius-pill);
   cursor: pointer;
@@ -153,13 +190,13 @@
 
 /* Offset all screens below the nav */
 .screen {
-  top: 54px !important;
+  top: var(--nav-height) !important;
 }
 
 /* Community screens need to account for nav */
 .community-screen {
-  top: 54px !important;
-  height: calc(100% - 54px) !important;
+  top: var(--nav-height) !important;
+  height: calc(100% - var(--nav-height)) !important;
 }
 
 /* Remove the redundant comm-header on community (replaced by global nav) */
@@ -170,9 +207,37 @@
 
 /* ─── Mobile ─────────────────────────────────────────────── */
 @media (max-width: 600px) {
-  .nav-brand { font-size: 12px; }
+  :root {
+    --nav-height: 88px;
+  }
+
+  #global-nav {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: auto auto;
+    align-content: center;
+    row-gap: 8px;
+    padding: 10px 14px;
+  }
+
+  .nav-brand {
+    grid-column: 1;
+    grid-row: 1;
+    font-size: 12px;
+  }
+
+  .nav-actions {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .nav-tabs {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    gap: 0;
+    justify-self: center;
+  }
+
   .nav-username { display: none; }
   .nav-submit { padding: 7px 12px; font-size: 12px; }
-  .nav-tabs { gap: 0; }
   .nav-tab { padding: 6px 12px; font-size: 12px; }
 }

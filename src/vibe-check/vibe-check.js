@@ -25,7 +25,7 @@ function renderInputState(container, onScan) {
   container.innerHTML = `
     <div class="vc-hero">
       ${SHIELD_SVG}
-      <h1 class="vc-title">VIBE CHECK</h1>
+      <h1 class="vc-title">VIBE CODE CHECK</h1>
       <p class="vc-subtitle">Security scanner for AI-generated code</p>
       <div class="vc-badge-row">
         ${BADGE_LABELS.map(b => `<span class="vc-badge ${BADGE_CLASSES[b]}">${b}</span>`).join('')}

@@ -32,7 +32,7 @@
 
 .vc-title {
   font-family: var(--font-display);
-  font-size: clamp(32px, 6vw, 52px);
+  font-size: clamp(24px, 4.5vw, 44px);
   color: var(--white);
   letter-spacing: 0.02em;
   margin: 0 0 10px;
